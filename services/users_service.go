@@ -1,3 +1,6 @@
+/**
+Entire business logic goes here.
+*/
 package services
 
 import (
@@ -5,6 +8,14 @@ import (
 	"github.com/fvukojevic/bookstore_users-api/utils/errors"
 )
 
-func CreateUser(user users.User) (*users.User, *errors.RestErr) {
-	return &user, nil
+func CreateUser(user *users.User) (*users.User, *errors.RestErr) {
+	if err := user.Validate(); err != nil {
+		return nil, err
+	}
+
+	if saveErr := user.Save(); saveErr != nil {
+		return nil, saveErr
+	}
+
+	return user, nil
 }
