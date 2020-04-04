@@ -22,6 +22,7 @@ type usersServiceInterface interface {
 	UpdateUser(isPartial bool, user *users.User) (*users.User, *errors.RestErr)
 	DeleteUser(userId int64) *errors.RestErr
 	SearchUser(status string) (users.Users, *errors.RestErr)
+	LoginUser(request users.LoginRequest) (*users.User, *errors.RestErr)
 }
 
 func (s *usersService) GetUser(userId int64) (*users.User, *errors.RestErr) {
@@ -40,11 +41,8 @@ func (s *usersService) CreateUser(user *users.User) (*users.User, *errors.RestEr
 
 	user.DateCreated = date_utils.GetNowDBFormat()
 	user.Status = users.StatusActive
-	hashedPassword, hashErr := crypto_utils.GetBcrypt(user.Password)
-	if hashErr != nil {
-		return nil, hashErr
-	}
-	user.Password = *hashedPassword
+	hashedPassword := crypto_utils.GetMd5(user.Password)
+	user.Password = hashedPassword
 	if saveErr := user.Save(); saveErr != nil {
 		return nil, saveErr
 	}
@@ -93,4 +91,15 @@ func (s *usersService) DeleteUser(userId int64) *errors.RestErr {
 func (s *usersService) SearchUser(status string) (users.Users, *errors.RestErr) {
 	dao := &users.User{}
 	return dao.FindByStatus(status)
+}
+
+func (s *usersService) LoginUser(request users.LoginRequest) (*users.User, *errors.RestErr) {
+	dao := &users.User{
+		Email:    request.Email,
+		Password: crypto_utils.GetMd5(request.Password),
+	}
+	if err := dao.FindByEmailAndPassword(); err != nil {
+		return nil, err
+	}
+	return dao, nil
 }
