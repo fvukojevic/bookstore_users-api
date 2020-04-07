@@ -1,6 +1,7 @@
 package users
 
 import (
+	"github.com/fvukojevic/bookstore_oauth-go/oauth"
 	"github.com/fvukojevic/bookstore_users-api/domain/users"
 	"github.com/fvukojevic/bookstore_users-api/services"
 	"github.com/fvukojevic/bookstore_users-api/utils/errors"
@@ -18,6 +19,10 @@ func getUserId(userIdParam string) (int64, *errors.RestErr) {
 }
 
 func Get(c *gin.Context) {
+	if err := oauth.AuthenticateRequest(c.Request); err != nil {
+		c.JSON(err.Status, err)
+		return
+	}
 	userId, idErr := getUserId(c.Param("user_id"))
 	if idErr != nil {
 		c.JSON(idErr.Status, idErr)
@@ -29,7 +34,12 @@ func Get(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, user.Marshall(c.GetHeader("X-Public") == "true"))
+	if oauth.GetCallerId(c.Request) == user.Id {
+		c.JSON(http.StatusOK, user.Marshall(false))
+		return
+	}
+
+	c.JSON(http.StatusOK, user.Marshall(oauth.IsPublic(c.Request)))
 }
 
 func Create(c *gin.Context) {
@@ -46,7 +56,7 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, result.Marshall(c.GetHeader("X-Public") == "true"))
+	c.JSON(http.StatusOK, result.Marshall(oauth.IsPublic(c.Request)))
 }
 
 func Update(c *gin.Context) {
