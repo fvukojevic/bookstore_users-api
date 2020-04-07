@@ -5,9 +5,9 @@ package services
 
 import (
 	"github.com/fvukojevic/bookstore_users-api/domain/users"
-	"github.com/fvukojevic/bookstore_users-api/utils/crypto_utils"
-	"github.com/fvukojevic/bookstore_users-api/utils/date_utils"
-	"github.com/fvukojevic/bookstore_users-api/utils/errors"
+	"github.com/fvukojevic/bookstore_util-go/utils/crypto_utils"
+	"github.com/fvukojevic/bookstore_util-go/utils/date_utils"
+	"github.com/fvukojevic/bookstore_util-go/utils/errors"
 )
 
 var (
