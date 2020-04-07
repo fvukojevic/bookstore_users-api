@@ -5,7 +5,7 @@ Here we create User transfer object that we can move from Persistence to Busines
 package users
 
 import (
-	"github.com/fvukojevic/bookstore_users-api/utils/errors"
+	"github.com/fvukojevic/bookstore_util-go/utils/errors"
 	"strings"
 )
 

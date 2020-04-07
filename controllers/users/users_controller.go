@@ -4,7 +4,7 @@ import (
 	"github.com/fvukojevic/bookstore_oauth-go/oauth"
 	"github.com/fvukojevic/bookstore_users-api/domain/users"
 	"github.com/fvukojevic/bookstore_users-api/services"
-	"github.com/fvukojevic/bookstore_users-api/utils/errors"
+	"github.com/fvukojevic/bookstore_util-go/utils/errors"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
