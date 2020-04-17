@@ -9,8 +9,8 @@ package users
 import (
 	"fmt"
 	"github.com/fvukojevic/bookstore_users-api/datasources/mysql/users_db"
-	"github.com/fvukojevic/bookstore_users-api/logger"
 	"github.com/fvukojevic/bookstore_util-go/utils/errors"
+	"github.com/fvukojevic/bookstore_util-go/utils/logger"
 	"github.com/fvukojevic/bookstore_util-go/utils/mysql_utils"
 	"strings"
 )
